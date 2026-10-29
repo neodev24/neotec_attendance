@@ -36,5 +36,7 @@ def install():
     # Prevent the earlier scheduler from sending with the superseded rules.
     old=frappe.db.get_value('Scheduled Job Type',{'method':'neotec_attendance.notifications.run'},'name')
     if old: frappe.db.set_value('Scheduled Job Type',old,'stopped',1)
+    from .form_layout import apply
+    apply()
     frappe.db.commit()
     return {'installed':True,'sending_enabled':bool(frappe.conf.get('neotec_attendance_policy_enabled'))}

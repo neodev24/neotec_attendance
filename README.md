@@ -1,6 +1,6 @@
 # Neotec Attendance
 
-Development pilot 0.2.0. Intended for Frappe/ERPNext/HRMS v15 and v16; framework integration is not yet verified. Do not enable production sending before site UAT.
+Development pilot 0.2.1. Intended for Frappe/ERPNext/HRMS v15 and v16; framework integration is not yet verified. Do not enable production sending before site UAT.
 
 ## Install on a test bench
 
@@ -24,3 +24,9 @@ python -m unittest test_policy -v
 ```
 
 The CI matrix tests Python 3.10 and 3.12 rule logic. It does NOT install Frappe or certify either Frappe major version. See PILOT_LIMITATIONS.md for the remaining integration work, configuration and UAT requirements.
+
+## Usage and rollout
+
+[HR usage guide and next steps](docs/USER_GUIDE.md) · [Pilot limits](PILOT_LIMITATIONS.md)
+
+After updating an existing installation, run `bench --site YOUR_SITE migrate` to apply the layout migration, then `bench --site YOUR_SITE clear-cache` and hard-refresh the form. Keep sending disabled during validation.
