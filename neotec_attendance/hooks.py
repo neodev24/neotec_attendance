@@ -1,0 +1,11 @@
+app_name = "neotec_attendance"
+app_title = "Neotec Attendance"
+app_publisher = "Neotec"
+app_description = "Attendance exception policies, review and reminders"
+app_email = "hosting@neotec.ai"
+app_license = "mit"
+required_apps = ["frappe", "erpnext", "hrms"]
+after_install = "neotec_attendance.setup_policy.install"
+after_migrate = "neotec_attendance.setup_policy.install"
+override_doctype_class = {"Neotec Attendance Exception": "neotec_attendance.policies.AttendanceException"}
+scheduler_events = {"hourly": ["neotec_attendance.policies.daily"]}

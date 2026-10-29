@@ -1,0 +1,17 @@
+name: Rule tests (not Frappe integration)
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  rules:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m unittest test_policy -v
+      - run: python -m compileall -q neotec_attendance

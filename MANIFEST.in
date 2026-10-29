@@ -1,0 +1,1 @@
+recursive-include neotec_attendance *.json *.txt *.js *.html *.css

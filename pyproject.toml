@@ -1,0 +1,15 @@
+[build-system]
+requires = ["flit_core>=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "neotec_attendance"
+description = "Attendance exception policies, review and reminders for Frappe HRMS"
+authors = [{name = "Neotec", email = "hosting@neotec.ai"}]
+readme = "README.md"
+requires-python = ">=3.10"
+dynamic = ["version"]
+dependencies = []
+
+[tool.flit.module]
+name = "neotec_attendance"
