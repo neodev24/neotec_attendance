@@ -1,5 +1,8 @@
 import unittest
-from neotec_attendance.policy_engine import resolve,window
+from neotec_attendance.policy_engine import resolve as _resolve, window
+BASE=dict(start_time="10:00:00",end_time="19:00:00",required_hours=9,weekly_off="4",punch_mode="Pairs")
+def resolve(employee, policies, day):
+    return _resolve(employee, policies, day, BASE)
 E=dict(name='E1',company='C1',department='D1')
 def p(**kw):
     return dict(name='P',scope='Employee',employee='E1',company='C1',docstatus=1,valid_from='2026-10-01',valid_to='2026-10-31',**kw)

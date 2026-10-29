@@ -1,79 +1,68 @@
-# Attendance Exceptions — HR User Guide
+# HR attendance configuration and exceptions
 
-## Before you start
+## 1 Set up this site
 
-This is a development pilot. Keep automatic sending disabled until HR reviews the cohort, recipients, calendars, source-sync completeness and sample reports. The form is available by searching **Neotec Attendance Exception** in the Desk search bar. HR User can create/save requests; HR Manager can approve by submitting. A different HR Manager must approve the creator's request, except Administrator override.
+A System Manager opens **Neotec Attendance Settings**. Leave Enabled off until review and tests are complete.
 
-The app evaluates records for review only. It does not edit standard Attendance, salary deductions, overtime approvals or device punches.
+1. Set Start Date to the first approved reporting date; older daily backlog is excluded. Use the site's timezone for Run After. Set Catch-up Days (1–7) and Monthly Day (1–28).
+2. In Companies add one row per company. Enable only the companies in the pilot.
+3. For each company choose Include All Active, or leave it off and add specific employees under Employees. Optional department, branch and employment-type filters apply in both modes. Empty selections do not select everyone.
+4. Set Required Hours only if the company has an agreed target. Zero leaves short-hours checks off unless an exception supplies a target. Do not confuse the span of an office shift with paid working hours.
+5. Add HR Recipients with Company, User and the user's HR Manager / HR User role. Merely having an HR role does not subscribe someone. Reporting managers are resolved from Employee.reports_to and receive only their direct reports within the company.
+6. Add employee and/or user exclusions. Excluded employees leave the report population. Excluded users receive no emails or in-app alerts, including HR digests.
+7. Choose employee reminders, reporting-manager digests, HR digests, monthly review and email/in-app channels independently.
+8. Save. Use Check Readiness and Preview Recipient Routing. Both operate on saved settings and send nothing. Preview yesterday's date using the server command below if needed.
+9. Verify source synchronization settings on each Shift Type. The engine waits until Last Sync of Checkin is later than the effective collection window. Do not advance it without establishing source-data completeness.
 
-## Form layout
+## 2 Confirm the normal schedule
 
-| Tab | Contents |
+The app uses submitted Shift Assignments covering the work date, then Employee.default_shift when no assignment exists. Missing and multiple shifts are setup/manual-review findings. It reads shift start/end, collection margins, IN/OUT interpretation, working-hour calculation and holiday list from HRMS. On v16 the dated employee holiday lookup is used when supported. Weekly offs normally come from the applicable holiday list.
+
+No office hours, fixed weekday off, employee identities or recipient addresses are embedded in the app. Do not change a customer's schedule merely to match a sample.
+
+## 3 Create an exception
+
+Open **Neotec Attendance Exception**. Select an optional Template, then Exception Type, scope, company, employee/department, inclusive start/end dates, reason and supporting evidence. Permanent exceptions require a start date but no end date; outage exclusions must have an end date.
+
+| Type | Relevant fields |
 |---|---|
-| Policy & Validity | Employee/department/company scope, validity, permanence, priority, reason and evidence |
-| Working Rules | Hours, overnight approval, punch requirements, weekly offs, emergency break and disruption |
-| Approval & Activity | Approver, approval time, amended-from reference; use timeline below for changes/comments |
+| Reduced Hours | Expected daily hours; normal start/end remain inherited |
+| Changed Hours | New start and end times |
+| Overnight Work | Start and end times; overnight enabled automatically |
+| Check-in Only | Check-in required; end is policy-calculated only |
+| Weekly Off Change | Replacement weekday set, Monday=0 through Sunday=6 |
+| Emergency Break | Start/end and paid/unpaid flag; hours still require manual reconciliation |
+| Site or Device Outage | Dated disruption exclusion; no employee punch reminders |
+| Custom | Individual advanced overrides, including combined decisions |
 
-The form uses two columns per section; Frappe controls responsive stacking. Enable only the override checkboxes you need. A visible value does not affect attendance unless its override is checked. An unchecked override inherits a rule. A checked override with a cleared Yes/No value explicitly disables that rule.
+For a five-hour day that must end earlier, use Custom with End Time and Required Hours, or create a combined template. Reducing required hours alone does not move the checkout window. For Friday + Saturday use 4,5 only when those are the approved days for that company/employee; these are examples, not legal defaults.
 
-## Create and approve
+Employee scope overrides department, which overrides company. Higher priority wins within a scope. Equal-priority competing changes to the same rule are rejected. Exceptions from another company never apply.
 
-1. Open the exception list and select **Add Neotec Attendance Exception**.
-2. Select Scope and Company. For Employee, select the employee; for Department select the department. Company scope applies across that company.
-3. Enter Valid From and Valid To. Both dates are inclusive. For an ongoing agreement, check Permanent instead of entering an end date. Outage exclusions cannot be permanent.
-4. Keep Priority at 0 unless HR intentionally needs a higher-priority exception within the same scope. Employee rules override department rules, which override company rules. Equal-priority changes to the same setting are conflicts.
-5. Describe the management decision and attach evidence as required by your internal process.
-6. In Working Rules enable the specific overrides and enter approved values.
-7. Save. A draft has no effect.
-8. A different HR Manager opens the draft, reviews it and selects Submit. Submission records the approver and time. No employee/manager approval portal is implemented yet.
-9. Preview the effective result for the employee/date before enabling production emails.
+Save creates a draft only. A different HR Manager must Submit to approve; Administrator may override. A submitted future policy waits until Valid From; an expired policy stays in history and stops applying. To revise an approved record, Cancel → Amend → approve again.
 
-## Examples
+## 4 Reusable templates
 
-| Requirement | Override selections | Values / notes |
-|---|---|---|
-| Five-hour day, 1–15 November | Required hours | 5. If actual shift must end at 15:00, also change End time to 15:00; reducing hours alone keeps the original punch window. |
-| Ongoing five-hour agreement | Required hours + Permanent | 5; specify the start date and approval reason. |
-| Work from 10:00 until 23:00 | End time, optionally Required hours | 23:00; set the target hours independently. A longer collection window is not overtime approval. |
-| Overnight 19:00–04:00 | Start time, End time, Overnight | 19:00, 04:00, checked Overnight. End belongs to next calendar day. Adjacent shift overlap remains a manual review limitation. |
-| Check-in only | Punch mode | Check-in only. Checkout is calculated from approved end time and is never recorded as an actual device event. |
-| Sunday instead of Friday off | Weekly off | 6. Replaces the weekly-off set. |
-| Friday and Saturday off | Weekly off | 4,5. |
-| Emergency break | Break start + Break end; optional Paid break | Enter both times. This pilot records approval but leaves paid/unpaid hours reconciliation to HR. |
-| Site/device disruption | Outage | Check override and Outage; enter verified start and end dates. Missing punches are excluded from employee reminders. Do not guess outage dates from expired sessions. |
+HR Manager opens **Neotec Attendance Template**, enters a unique title, optional country and description, and fills the approved rule values. Use Custom for combined advanced rules. Template defaults are not statutory claims. HR User can read templates but cannot edit them.
 
-Baseline in this pilot: 10:00–19:00, nine hours, Friday off, alternating punch pairs. Public holidays are read separately from the employee calendar. Changing weekly offs does not change public holidays.
+Selecting a template copies its values into a draft exception. Existing submitted exceptions are unaffected by later template changes. Validity, scope, evidence and approval remain on each exception. Disabled templates cannot be selected through the form.
 
-## Activity and validity
+## 5 Activity, reminders and reports
 
-- Use Comments on the standard document timeline for decisions, explanations and follow-up.
-- Track Changes is enabled. Standard Version history records field changes; approval and cancellation also appear through the document lifecycle. This is ordinary Frappe history, not a tamper-proof external audit ledger.
-- Submitted does not necessarily mean currently effective. A submitted future policy waits until Valid From; a submitted expired policy remains in history but is ignored by the evaluator.
-- To revise an approved exception: Cancel, Amend, edit and obtain fresh approval. Cancellation prevents application of that policy, including historical reevaluation; historical payroll snapshots are not implemented.
+Track Changes and the standard document timeline retain changes, comments and approval/cancellation events. This is standard Frappe history, not a tamper-proof external ledger.
 
-## Daily and monthly notifications
+Employee reminders contain actionable findings. Manager digests contain only direct-report rows. Explicit company HR recipients receive the company's cohort and pending/expiring/recently expired policy notices. No payroll deductions are made.
 
-| Recipient | Content |
-|---|---|
-| Employee | Actionable missing/unpaired punches or short-hours flags for yesterday |
-| Reporting manager | Only configured employees who currently report directly to that manager |
-| HR User / HR Manager | Pilot-cohort daily review plus pending/expiring/expired exception notices |
-| Employee monthly review | On the 28th, findings for the 1st–27th |
+Each enabled channel is queued once per recipient/company/category/date using a persistent delivery key. Inspect **Neotec Attendance Delivery**, **Email Queue** and **Error Log** after test runs. An in-app alert has no link to a log that another role cannot read. Sent email means transport acceptance, not inbox receipt.
 
-The job runs hourly but acts after 21:00 site time. This version reviews yesterday, not a live same-day shift. No repeat escalation or recovery for a fully missed send day is implemented. Email and in-app alert delivery are deduplicated by recipient/date/category. Email Queue records distinguish queued, sent and failed delivery; a delivery audit entry does not itself mean the email arrived.
+The monthly review contains completed dates before the configured review day. It is an early review, not a completed month or finalized payroll statement.
 
-Kishan/Mohsin exclusions are configuration, not source-code defaults. The excluded-recipient list currently suppresses reporting-manager digests only. HR-role recipients are separately resolved; review their role membership before activation. HR users receive the configured cohort and policy notices without enterprise company-permission filtering. Do not broaden use across companies until recipient scoping is completed and tested.
+## 6 Preview and next steps
 
-## Next steps for the administrator
+```bash
+bench --site YOUR_TEST_SITE execute neotec_attendance.settings.readiness
+bench --site YOUR_TEST_SITE execute neotec_attendance.policies.preview --kwargs '{"date":"2026-11-02"}'
+bench --site YOUR_TEST_SITE execute neotec_attendance.policies.routing_preview
+```
 
-1. Update the app safely and run migrate so the layout is applied to existing forms.
-2. Open the form, hard-refresh and verify the three tabs and paired fields.
-3. Review an employee five-hour sample, an overnight sample and two-weekly-off sample on a TEST site.
-4. Configure the explicit employee cohort and excluded reporting-manager recipients.
-5. Set the first approved reporting date after restoration; avoid outage-backlog reminders.
-6. Connect the source integration's verified sync-through timestamp. Do not set it to current time just to bypass the completeness guard.
-7. Verify employee, HR and manager email recipients and notification visibility using test data. The app does not provide a recipient-routing settings screen yet.
-8. Complete site UAT on both Frappe/HRMS v15 and v16. Python rule tests are not framework certification.
-9. Only after those checks, enable sending for the pilot and monitor Email Queue, Error Log and Neotec Attendance Delivery.
-
-The app currently does not change payroll, create actual automatic checkout punches, provide employee self-service, support reporting-manager approval, or calculate paid/unpaid breaks automatically.
+Replace the sample date with a completed workday. These are administrator-only operations and do not send emails. Test one v15 and one v16 site, then enable a small employee cohort with test recipients. See MULTISITE_ROLLOUT.md for the deployment sequence and PILOT_LIMITATIONS.md for unfinished features.
