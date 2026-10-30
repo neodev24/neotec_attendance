@@ -69,3 +69,58 @@ def apply():
     doc.save(ignore_permissions=True)
     frappe.clear_cache(doctype=name)
     return {'doctype':name,'fields':len(doc.fields),'layout_updated':True}
+
+
+def apply_template():
+    """Reuse the exception rule layout, without exception-only scope/validity fields."""
+    name = 'Neotec Attendance Template'
+    if not frappe.db.exists('DocType', name):
+        return
+    template = frappe.get_doc('DocType', name)
+    exception = frappe.get_doc('DocType', 'Neotec Attendance Exception')
+    existing = {f.fieldname: f.as_dict() for f in template.fields}
+    ordered = []
+    def layout(fieldname, fieldtype, label='', **kw):
+        ordered.append(dict(fieldname=fieldname, fieldtype=fieldtype, label=label, **kw))
+    def take(fieldname):
+        if fieldname in existing:
+            ordered.append(existing.pop(fieldname))
+    layout('template_info_tab', 'Tab Break', 'Template Details')
+    layout('template_intro', 'HTML', options='<p>A template supplies reusable rule values for new draft exceptions. It does not assign a policy to employees, activate notifications or establish legal compliance. Existing approved exceptions keep their copied values.</p>')
+    layout('template_info_section', 'Section Break', 'Name and Purpose')
+    take('title'); take('exception_type')
+    layout('template_info_column', 'Column Break')
+    take('country'); take('disabled')
+    layout('template_description_section', 'Section Break', 'Instructions for HR')
+    take('description')
+    copying = False
+    owned_layout = {'template_info_tab','template_intro','template_info_section','template_info_column','template_description_section'}
+    for source in exception.fields:
+        if source.fieldname == 'rules_tab':
+            copying = True
+        if source.fieldname == 'audit_tab':
+            break
+        if not copying:
+            continue
+        spec = source.as_dict()
+        if spec.get('fieldtype') in ('Tab Break', 'Section Break', 'Column Break', 'HTML'):
+            owned_layout.add(source.fieldname)
+            existing.pop(source.fieldname, None)
+            ordered.append(spec)
+        elif source.fieldname in existing:
+            saved = existing.pop(source.fieldname)
+            for key in ('label', 'description', 'depends_on'):
+                if key in spec:
+                    saved[key] = spec[key]
+            ordered.append(saved)
+    for key, spec in existing.items():
+        if key not in owned_layout:
+            ordered.append(spec)
+    template.set('fields', [])
+    for spec in ordered:
+        for key in ('name','parent','parentfield','parenttype','idx','creation','modified','owner','modified_by','doctype'):
+            spec.pop(key, None)
+        template.append('fields', spec)
+    template.track_changes = 1
+    template.save(ignore_permissions=True)
+    frappe.clear_cache(doctype=name)

@@ -2,7 +2,7 @@
 
 ## 1 Set up this site
 
-A System Manager opens **Neotec Attendance Settings**. Leave Enabled off until review and tests are complete.
+A System Manager opens **Neotec Attendance Settings**. Follow tabs in order: **1. Setup Guide → 2. Companies & Employees → 3. Notifications → 4. Schedule → 5. Review & Activate**. Leave Enabled off until review and tests are complete. Scalar fields use two columns; employee/recipient tables use full width. Expand a table row to see its instructions and aligned fields.
 
 1. Set Start Date to the first approved reporting date; older daily backlog is excluded. Use the site's timezone for Run After. Set Catch-up Days (1–7) and Monthly Day (1–28).
 2. In Companies add one row per company. Enable only the companies in the pilot.
@@ -66,3 +66,27 @@ bench --site YOUR_TEST_SITE execute neotec_attendance.policies.routing_preview
 ```
 
 Replace the sample date with a completed workday. These are administrator-only operations and do not send emails. Test one v15 and one v16 site, then enable a small employee cohort with test recipients. See MULTISITE_ROLLOUT.md for the deployment sequence and PILOT_LIMITATIONS.md for unfinished features.
+
+## Field reference
+
+| Setting | Purpose |
+|---|---|
+| Include This Company | Add the company to the selected population; does not activate sending |
+| Include All Active Employees | On = all active employees matching company filters; off = only Selected Employees matching those filters |
+| Daily Hours Target | Optional approved target; blank/0 leaves short-hours checks off unless an exception supplies a target |
+| Selected Employees | Explicit employee list for companies with all-active off |
+| Employee exclusion | Remove from population and suppress delivery to the linked user |
+| User exclusion | Suppress every delivery audience/channel to this user; their employee may still appear in HR reports |
+| Employee Correction Reminders | Only actionable missing/unpaired/short-hour findings |
+| Reporting Manager Daily Digest | Direct reports within the same company |
+| HR Daily Review | Company-scoped HR digest and policy reminders; requires authorized HR recipient rows |
+| Monthly Attendance Review | Independent partial-month review for employees |
+| Email / In-App | Separate channels; at least one must be on before activating |
+| First Attendance Date | No daily reminders or monthly coverage before this date |
+| Run Daily Reviews After | Site-local review time; hourly scheduler runs at the next tick |
+| Previous Days to Recheck | 1–7 dates for late synchronization and retry |
+| Minutes to Wait After Shift End | Additional evaluation grace; does not extend working hours or waive lateness |
+| Monthly Review Day | 1–28; covers through the prior day |
+| Enable Attendance Notifications | Master activation on the final tab; keep off during setup |
+
+The readiness and routing previews use the saved configuration. Results appear as tables on Review & Activate and in a dialog. No preview queues a message. A clear readiness result is not a substitute for real v15/v16 integration and delivery tests.

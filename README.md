@@ -1,6 +1,6 @@
 # Neotec Attendance
 
-Version 0.3.0 is a reusable attendance-exception and notification **development release** for Frappe / ERPNext / HRMS. Each installed site has independent settings, companies, employees, approvals and logs. No external tenant registry or cross-site data aggregation is used.
+Version 0.3.1 is a reusable attendance-exception and notification **development release** for Frappe / ERPNext / HRMS. Each installed site has independent settings, companies, employees, approvals and logs. No external tenant registry or cross-site data aggregation is used.
 
 ## What changed
 
@@ -52,6 +52,8 @@ python -m unittest discover -v
 python -m compileall -q neotec_attendance
 ```
 
-34 local rule and mocked-adapter/routing tests pass. CI checks Python 3.10 and 3.12; **it does not install or certify Frappe v15/v16**. Official branch sources were checked for the holiday API signature difference. Run live framework integration UAT on one v15 and one v16 test environment before wider rollout.
+38 local rule and mocked-adapter/routing tests pass. CI checks Python 3.10 and 3.12; **it does not install or certify Frappe v15/v16**. Official branch sources were checked for the holiday API signature difference. Run live framework integration UAT on one v15 and one v16 test environment before wider rollout.
 
 [Known limitations](PILOT_LIMITATIONS.md) · [Release notes](docs/RELEASE_NOTES.md)
+
+Settings now follow five setup tabs, with aligned child-row dialogs and inline instructions. Existing schema upgrades preserve saved settings and customer-added fields.

@@ -52,7 +52,8 @@ def install():
         existing.save(ignore_permissions=True)
     from .setup_settings import install as install_settings
     install_settings()
-    from .form_layout import apply
+    from .form_layout import apply, apply_template
     apply()
+    apply_template()
     frappe.db.commit()
     return {'installed':True,'sending_enabled':bool(frappe.db.get_single_value('Neotec Attendance Settings', 'enabled'))}

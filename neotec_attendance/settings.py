@@ -22,6 +22,9 @@ class AttendanceSettings(Document):
         for config in self.companies:
             if not 0 <= float(config.required_hours or 0) <= 24:
                 frappe.throw('Company required hours must be 0–24')
+        for exclusion in self.exclusions:
+            if not exclusion.employee and not exclusion.user:
+                frappe.throw('Each exclusion needs an employee or a user')
         for row in self.hr_recipients:
             if row.company not in companies:
                 frappe.throw('Configure the recipient company first')
